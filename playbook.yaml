@@ -1,0 +1,28 @@
+---
+- name: Deploy Apache HTTPD and custom homepage
+  hosts: all
+  become: yes
+  vars:
+    title: "My Custom Apache HTTPD Server"
+    
+  tasks:
+    - name: Update apt package index
+      yum:
+        update_cache: yes
+
+    - name: Install Apache HTTPD
+      yum:
+        name: httpd
+        state: present
+
+    - name: Start Apache HTTPD service
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: Copy custom homepage
+      template:
+        src: index.html.j2
+        dest: /var/www/html/index.html
+
